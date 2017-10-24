@@ -19,7 +19,7 @@ namespace TestRoWMover
                 new XElement("rows")
                 ));
 
-            XMLMoveTool.RowMover.Move(source, destination);
+            XMLMoveTool.RowMover.MoveContent(source, destination);
             XElement resultingRow = destination.Descendants("rows").Single();
             Assert.AreEqual(1, resultingRow.Elements().Count());
         }
