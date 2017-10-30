@@ -4,7 +4,7 @@ using System.IO;
 
 namespace XMLMoveTool
 {
-    public static class RowMover 
+    public static class RowMover
     {
         private class MovingTask
         {
@@ -31,7 +31,7 @@ namespace XMLMoveTool
             }
         }
 
-       public static void MoveContent (XDocument source, XDocument destination , string collectionElementName = "rows")
+        public static void MoveContent(XDocument source, XDocument destination, string collectionElementName = "rows")
         {
             MoveContent(source.Descendants(collectionElementName).Single(), destination.Descendants(collectionElementName).Single());
         }
@@ -41,14 +41,14 @@ namespace XMLMoveTool
             destination.Add(source.Elements());
         }
 
-        private static MovingTask CreateMovingTask(DirectoryInfo sourceFolder, FileInfo destinatinFile)
-        {
-            return new MovingTask(sourceFolder.GetFiles(destinatinFile.Name).Single(), destinatinFile);
-        }
-
         public static void MoveBetweenFolders(DirectoryInfo source, DirectoryInfo destination)
         {
-            foreach (MovingTask task in destination.GetFiles("*.xml").Select(f => CreateMovingTask(source, f))) task.Move();
+            foreach (FileInfo destinationFile in destination.GetFiles("*.xml"))
+            {
+                FileInfo sourceFile = source.GetFiles(destinationFile.Name).SingleOrDefault();
+                if (sourceFile == null) continue;
+                new MovingTask(sourceFile, destinationFile).Move();
+            }
         }
     }
 }
