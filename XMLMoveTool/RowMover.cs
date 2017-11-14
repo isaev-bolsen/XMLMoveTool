@@ -31,6 +31,24 @@ namespace XMLMoveTool
             }
         }
 
+        public static void RemoveInactive(FileInfo source)
+        {
+            XDocument xDoc = XDocument.Load(source.FullName);
+            RemoveInactive(xDoc);
+            xDoc.Save(source.FullName);
+        }
+
+        public static void RemoveInactive(XDocument xDocument, string collectionElementName = "rows")
+        {
+            RemoveInactive(xDocument.Descendants(collectionElementName).Single());
+        }
+
+        public static void RemoveInactive(XElement source)
+        {
+            XElement[] toRemove = source.Elements().Where(e => e.Attribute("IsActive").Value == "0").ToArray();
+            foreach (XElement elt in toRemove) elt.Remove();
+        }
+
         public static void MoveContent(XDocument source, XDocument destination, string collectionElementName = "rows")
         {
             MoveContent(source.Descendants(collectionElementName).Single(), destination.Descendants(collectionElementName).Single());
