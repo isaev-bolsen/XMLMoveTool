@@ -51,11 +51,12 @@ namespace XMLMoveTool
 
         public static void MoveContent(XDocument source, XDocument destination, string collectionElementName = "rows")
         {
-            MoveContent(source.Descendants(collectionElementName).Single(), destination.Descendants(collectionElementName).Single());
+            MoveContent(source.Descendants(collectionElementName).SingleOrDefault(), destination.Descendants(collectionElementName).SingleOrDefault());
         }
 
         public static void MoveContent(XElement source, XElement destination)
         {
+            if (source == null || destination == null) return;
             destination.Add(source.Elements());
         }
 
