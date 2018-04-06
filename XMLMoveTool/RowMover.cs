@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
-using System.IO;
 
 namespace XMLMoveTool
 {
@@ -27,7 +28,13 @@ namespace XMLMoveTool
             public void Move()
             {
                 MoveContent(sourceXML, destinationXML);
-                destinationXML.Save(destination.FullName);
+                using (XmlTextWriter XmlTextWriter = new XmlTextWriter(destination.FullName, null)
+                {
+                    Formatting = Formatting.Indented,
+                    Indentation = 1,
+                    IndentChar = '\t'
+                })
+                    destinationXML.Save(XmlTextWriter);
             }
         }
 
